@@ -1,14 +1,20 @@
-import cv2
 import streamlit as st
 
-st.title("Webcam Live Feed")
-run = st.checkbox('Run')
-FRAME_WINDOW = st.image([])
-camera = cv2.VideoCapture(0)
+import cv2
 
-while run:
-    _, frame = camera.read()
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    FRAME_WINDOW.image(frame)
-else:
-    st.write('Stopped')
+def check_webcam():
+    webcam_dict = dict()
+    for i in range(0, 10):
+        cap = cv2.VideoCapture(i)
+        is_camera = cap.isOpened()
+        if is_camera:
+            webcam_dict[f"index[{i}]"] = "VALID"
+            cap.release()
+        else:
+            webcam_dict[f"index[{i}]"] = None
+    return webcam_dict
+
+if __name__ == "__main__":
+    st.title('WebCam index validation check')
+    webcam_dict = check_webcam()
+    st.write(webcam_dict)
